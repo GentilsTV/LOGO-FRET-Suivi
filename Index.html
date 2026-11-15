@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log Fret - Suivi de Colis</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0f172a;
+            margin: 0;
+            padding: 15px;
+            color: #334155;
+        }
+        .container {
+            max-width: 450px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        h2 {
+            color: #1e3a8a;
+            font-size: 24px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            color: #1e293b;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .whatsapp-btn {
+            display: block;
+            text-align: center;
+            background-color: #25D366;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        #resultatSuivi {
+            margin-top: 20px;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #2563eb;
+            display: none;
+        }
+        .info-ligne {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #334155;
+        }
+        .btn-call {
+            display: inline-block;
+            background: #0284c7;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 12px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Log Fret</h2>
+        <div class="subtitle">Suivez votre expédition en temps réel</div>
+
+        <div class="form-group">
+            <label>Entrez votre Numéro de Suivi</label>
+            <input type="text" id="searchTracking" placeholder="Ex: LF-XXXXXX">
+        </div>
+        <button onclick="suivreColis()">Rechercher mon Colis</button>
+
+        <div id="resultatSuivi"></div>
+
+        <!-- Lien WhatsApp Officiel -->
+        <a href="https://wa.me/2250170979736" target="_blank" class="whatsapp-btn">💬 Contacter l'agence sur WhatsApp</a>
+    </div>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz0-OeasMHF37RshgGZt3ki62URAA2pThY2RyySh9cLWXCGUgKHeaQLl5QYwFcS0QIBPQ/exec';
+
+        async function suivreColis() {
+            const tracking = document.getElementById('searchTracking').value.trim();
+            const resultatDiv = document.getElementById('resultatSuivi');
+            
+            if (!tracking) {
+                alert("Veuillez entrer un numéro de suivi valide.");
+                return;
+            }
+
+            resultatDiv.style.display = "block";
+            resultatDiv.innerHTML = "<div style='text-align:center; color:#2563eb;'>Recherche en cours...</div>";
+
+            try {
+                const response = await fetch(`${scriptURL}?tracking=${tracking}`);
+                const data = await response.json();
+
+                if (data.result === "found") {
+                    resultatDiv.style.display = "block";
+                    resultatDiv.innerHTML = `
+                        <div class="info-ligne"><b>Expéditeur :</b> ${data.client}</div>
+                        <div class="info-ligne"><b>Destination :</b> ${data.destination}</div>
+                        <div class="info-ligne"><b>Description :</b> ${data.description}</div>
+                        <div class="info-ligne"><b>Poids :</b> ${data.poids} Kg</div>
+                        <div class="info-ligne"><b>Statut :</b> <span style="color: #16a34a; font-weight: bold;">${data.statut}</span></div>
+                        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+                            <a href="tel:${data.telDest}" class="btn-call">📞 Appeler le destinataire</a>
+                        </div>
+                    `;
+                } else {
+                    resultatDiv.style.display = "block";
+                    resultatDiv.innerHTML = "<span style='color: #dc2626;'>Aucun colis trouvé avec ce numéro. Vérifiez et réessayez.</span>";
+                }
+            } catch (error) {
+                resultatDiv.style.display = "block";
+                resultatDiv.innerHTML = "<span style='color: #dc2626;'>Erreur de connexion au serveur.</span>";
+            }
+        }
+    </script>
+</body>
+</html>
