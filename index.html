@@ -19,15 +19,27 @@
             padding: 25px;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
         }
-        h2 { color: #1e3a8a; font-size: 24px; margin-bottom: 5px; text-align: center; }
-        .subtitle { text-align: center; font-size: 13px; color: #64748b; margin-bottom: 20px; }
-        .form-group { margin-bottom: 15px; }
+        .logo-container {
+            margin-bottom: 15px;
+        }
+        .logo-container img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #2563eb;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 { color: #1e3a8a; font-size: 24px; margin-bottom: 5px; }
+        .subtitle { font-size: 13px; color: #64748b; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #1e293b; }
         input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 16px; box-sizing: border-box; outline: none; }
         button { width: 100%; background: linear-gradient(135deg, #16a34a, #15803d); color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
         .whatsapp-btn { display: block; text-align: center; background-color: #25D366; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; font-size: 14px; }
-        #resultatSuivi { margin-top: 20px; background: #f8fafc; padding: 15px; border-radius: 10px; border-left: 5px solid #2563eb; display: none; }
+        #resultatSuivi { margin-top: 20px; background: #f8fafc; padding: 15px; border-radius: 10px; border-left: 5px solid #2563eb; display: none; text-align: left; }
         .info-ligne { margin-bottom: 8px; font-size: 14px; color: #334155; }
         .btn-call, .btn-gps { display: inline-block; background: #0284c7; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 12px; margin-top: 8px; font-weight: bold; margin-right: 5px; }
         .btn-gps { background: #7c3aed; }
@@ -35,6 +47,10 @@
 </head>
 <body>
     <div class="container">
+        <!-- Logo de l'entreprise -->
+        <div class="logo-container">
+            <img src="https://lh3.googleusercontent.com/d/1DMZZIHvYoBbfbUMW7LQ1RxgLG2qmhvqG=s512" alt="Logo Log Fret">
+        </div>
         <h2>Log Fret</h2>
         <div class="subtitle">Suivez votre expédition en temps réel</div>
 
@@ -50,8 +66,7 @@
     </div>
 
     <script>
-        // Ton nouveau lien Google Apps Script mis à jour
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzIyvxUaF43_bpHaumsI0oYsttmPO_-r0FvYb5vpFWjTlXiGXbW9DUzJHY-LgNNm7Mqhg/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyucirQVDTnR-jJ6qq5rMbl1gm80zmQcinYcPViJ8NBf8FtsNCBI6H-6Rs85rYgUS6JjQ/exec';
 
         async function suivreColis() {
             const tracking = document.getElementById('searchTracking').value.trim();
@@ -83,7 +98,7 @@
                         <div class="info-ligne"><b>Arrivée Estimée :</b> ${data.dateArrivee}</div>
                         <div class="info-ligne"><b>Agent en charge :</b> ${data.agent}</div>
                         <div class="info-ligne"><b>Statut :</b> <span style="color: #16a34a; font-weight: bold;">${data.statut}</span></div>
-                        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+                        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #e2e8f0; text-align: center;">
                             <a href="tel:${data.telDest}" class="btn-call">📞 Appeler le destinataire</a>
                             ${gpsButton}
                         </div>
